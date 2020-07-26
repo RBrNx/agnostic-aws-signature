@@ -1,0 +1,28 @@
+{
+  "name": "agnostic-aws-signature",
+  "version": "1.0.0",
+  "description": "Environment Agnostic implementation of the AWS Signature v4 Signing Process. Even works with React Native!",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "test": "jest"
+  },
+  "author": "RBrNx",
+  "license": "ISC",
+  "dependencies": {
+    "crypto-js": "^4.0.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.10.5",
+    "@babel/preset-env": "^7.10.4",
+    "babel-eslint": "^10.1.0",
+    "babel-jest": "^26.1.0",
+    "eslint": "^7.5.0",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-plugin-import": "^2.22.0",
+    "eslint-plugin-prettier": "^3.1.4",
+    "eslint-plugin-security": "^1.4.0",
+    "jest": "^26.1.0",
+    "prettier": "^2.0.5"
+  }
+}
