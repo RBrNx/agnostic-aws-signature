@@ -10,6 +10,7 @@ import {
   hmac,
   buildAuthorizationHeader,
   buildCanonicalQueryString,
+  getHeaderKeys,
 } from './helpers';
 
 export const createAwsClient = (accessKey, secretKey, sessionToken, config) => {
@@ -31,24 +32,20 @@ export const createAwsClient = (accessKey, secretKey, sessionToken, config) => {
   awsSigV4Client.debug = debug;
 
   awsSigV4Client.signRequest = (request) => {
-    const { method, queryParams, headers, path = '' } = request;
+    const { method, queryParams, headers = {}, path = '' } = request;
     const { body } = request;
 
     const requestMethod = method.toUpperCase();
     const requestPath = awsSigV4Client.pathComponent + path;
 
-    const headerKeys = Object.keys(request.headers).map((key) => key.toLowerCase());
-
     // If the user has not specified an override for Content type the use default
-    if (!headerKeys.includes('content-type')) {
+    if (!getHeaderKeys(headers).includes('content-type')) {
       headers['Content-Type'] = awsSigV4Client.defaultContentType;
-      headerKeys.push('content-type');
     }
 
     // If the user has not specified an override for Accept type the use default
-    if (!headerKeys.includes('accept')) {
+    if (!getHeaderKeys(headers).includes('accept')) {
       headers.Accept = awsSigV4Client.defaultAcceptType;
-      headerKeys.push('accept');
     }
 
     // If there is no body remove the content-type header so it is not included in SigV4 calculation
@@ -83,9 +80,8 @@ export const createAwsClient = (accessKey, secretKey, sessionToken, config) => {
     if (queryString) url += `?${queryString}`;
 
     // Need to re-attach Content-Type if it is not specified at this point
-    if (!headerKeys.includes('content-type')) {
+    if (!getHeaderKeys(headers).includes('content-type')) {
       headers['Content-Type'] = awsSigV4Client.defaultContentType;
-      headerKeys.push('content-type');
     }
 
     if (awsSigV4Client.debug) {
