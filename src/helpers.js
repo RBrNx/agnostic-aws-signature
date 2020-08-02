@@ -1,3 +1,4 @@
+/* eslint-disable security/detect-object-injection */
 import SHA256 from 'crypto-js/sha256';
 import HmacSHA256 from 'crypto-js/hmac-sha256';
 import { AWS4_REQUEST, AWS_SHA_256, AWS4 } from './constants';

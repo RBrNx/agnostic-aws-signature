@@ -1,3 +1,4 @@
+/* eslint-disable security/detect-object-injection */
 import { X_AMZ_DATE, HOST, AUTHORIZATION, X_AMZ_SECURITY_TOKEN } from './constants';
 import {
   extractHostname,
