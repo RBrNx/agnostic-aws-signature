@@ -4,7 +4,7 @@ import { AWS4_REQUEST, AWS_SHA_256, AWS4 } from './constants';
 
 const hash = (value) => SHA256(value).toString();
 
-const hmac = (secret, value) => HmacSHA256(value, secret, { asBytes: true });
+const hmac = (secret, value) => HmacSHA256(value, secret);
 
 const buildCanonicalUri = (uri) => encodeURI(uri);
 
