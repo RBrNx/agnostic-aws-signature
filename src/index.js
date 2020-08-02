@@ -1,4 +1,3 @@
-import encHex from 'crypto-js/enc-hex';
 import { X_AMZ_DATE, HOST, AUTHORIZATION, X_AMZ_SECURITY_TOKEN } from './constants';
 import {
   extractHostname,
@@ -69,7 +68,7 @@ export const createAwsClient = (accessKey, secretKey, sessionToken, config) => {
     const credentialScope = buildCredentialScope(datetime, awsSigV4Client.region, awsSigV4Client.serviceName);
     const stringToSign = buildStringToSign(datetime, credentialScope, hashedCanonicalRequest);
     const signingKey = calculateSigningKey(awsSigV4Client.secretKey, datetime, awsSigV4Client.region, awsSigV4Client.serviceName);
-    const signature = hmac(signingKey, stringToSign).toString(encHex);
+    const signature = hmac(signingKey, stringToSign).toString();
     headers[AUTHORIZATION] = buildAuthorizationHeader(awsSigV4Client.accessKey, credentialScope, headers, signature);
 
     delete headers[HOST];
