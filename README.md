@@ -4,5 +4,5 @@ Environment Agnostic implementation of the AWS Signature v4 Signing Process. Eve
 
 ![npm version](https://img.shields.io/npm/v/agnostic-aws-signature)
 ![npm bundle size](https://img.shields.io/bundlephobia/min/agnostic-aws-signature)
-![NPM](https://img.shields.io/npm/l/agnostic-aws-signature)
-![jest coverage](shields/coverage.svg)
+![license](https://img.shields.io/npm/l/agnostic-aws-signature)
+![jest coverage](https://raw.githubusercontent.com/RBrNx/agnostic-aws-signature/master/shields/coverage.svg)
