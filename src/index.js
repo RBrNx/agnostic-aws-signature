@@ -1,83 +1,16 @@
-import SHA256 from 'crypto-js/sha256';
-import HmacSHA256 from 'crypto-js/hmac-sha256';
-import encHex from 'crypto-js/enc-hex';
-
-const AWS_SHA_256 = 'AWS4-HMAC-SHA256';
-const AWS4_REQUEST = 'aws4_request';
-const AWS4 = 'AWS4';
-const X_AMZ_DATE = 'x-amz-date';
-const X_AMZ_SECURITY_TOKEN = 'x-amz-security-token';
-const HOST = 'host';
-const AUTHORIZATION = 'Authorization';
-
-export const hash = (value) => SHA256(value).toString();
-
-export const hmac = (secret, value) => HmacSHA256(value, secret, { asBytes: true });
-
-export const buildCanonicalUri = (uri) => encodeURI(uri);
-
-export const buildCanonicalQueryString = (queryParams) => {
-  if (!queryParams) return '';
-
-  let canonicalQueryString = '';
-  const queryParamKeys = Object.keys(queryParams).sort();
-
-  queryParamKeys.forEach((key) => {
-    canonicalQueryString += `${key}=${encodeURIComponent(queryParams[key])}&`;
-  });
-
-  return canonicalQueryString.slice(0, -1);
-};
-
-export const buildCanonicalHeaders = (headers) => {
-  let canonicalHeaders = '';
-  const headerKeys = Object.keys(headers).sort();
-
-  headerKeys.forEach((key) => {
-    canonicalHeaders += `${key.toLowerCase()}:${headers[key]}\n`;
-  });
-
-  return canonicalHeaders;
-};
-
-export const buildCanonicalSignedHeaders = (headers) => {
-  const headerKeys = Object.keys(headers).sort();
-
-  return headerKeys.join(';');
-};
-
-export const buildCanonicalRequest = (method, path, queryParams, headers, payload) => {
-  return `${method}\n${buildCanonicalUri(path)}\n${buildCanonicalQueryString(queryParams)}\n${buildCanonicalHeaders(
-    headers,
-  )}\n${buildCanonicalSignedHeaders(headers)}\n${hash(payload)}`;
-};
-
-export const buildCredentialScope = (datetime, region, service) => {
-  return `${datetime.substr(0, 8)}/${region}/${service}/${AWS4_REQUEST}`;
-};
-
-export const buildStringToSign = (datetime, credentialScope, hashedCanonicalRequest) => {
-  return `${AWS_SHA_256}\n${datetime}\n${credentialScope}\n${hashedCanonicalRequest}`;
-};
-
-export const calculateSigningKey = (secretKey, datetime, region, service) => {
-  const hashedDate = hmac(AWS4 + secretKey, datetime.substr(0, 8));
-  const hashedRegion = hmac(hashedDate, region);
-  const hashedService = hmac(hashedRegion, service);
-  const signingKey = hmac(hashedService, AWS4_REQUEST);
-
-  return signingKey;
-};
-
-export const buildAuthorizationHeader = (accessKey, credentialScope, headers, signature) => {
-  return `${AWS_SHA_256} Credential=${accessKey}/${credentialScope}, SignedHeaders=${buildCanonicalSignedHeaders(headers)}, Signature=${signature}`;
-};
-
-const extractHostname = (url) => {
-  const { hostname } = new URL(url);
-
-  return hostname;
-};
+/* eslint-disable security/detect-object-injection */
+import { X_AMZ_DATE, HOST, AUTHORIZATION, X_AMZ_SECURITY_TOKEN } from './constants';
+import {
+  extractHostname,
+  buildCanonicalRequest,
+  hash,
+  buildCredentialScope,
+  buildStringToSign,
+  calculateSigningKey,
+  hmac,
+  buildAuthorizationHeader,
+  buildCanonicalQueryString,
+} from './helpers';
 
 export const createAwsClient = (accessKey, secretKey, sessionToken, config) => {
   const awsSigV4Client = {};
@@ -136,7 +69,7 @@ export const createAwsClient = (accessKey, secretKey, sessionToken, config) => {
     const credentialScope = buildCredentialScope(datetime, awsSigV4Client.region, awsSigV4Client.serviceName);
     const stringToSign = buildStringToSign(datetime, credentialScope, hashedCanonicalRequest);
     const signingKey = calculateSigningKey(awsSigV4Client.secretKey, datetime, awsSigV4Client.region, awsSigV4Client.serviceName);
-    const signature = hmac(signingKey, stringToSign).toString(encHex);
+    const signature = hmac(signingKey, stringToSign).toString();
     headers[AUTHORIZATION] = buildAuthorizationHeader(awsSigV4Client.accessKey, credentialScope, headers, signature);
 
     delete headers[HOST];
