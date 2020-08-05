@@ -7,6 +7,15 @@
   "scripts": {
     "test": "jest && coverage-shield"
   },
+  "keywords": [
+    "agnostic-aws-signature",
+    "aws-signature",
+    "aws",
+    "signature",
+    "signature-v4",
+    "sig v4",
+    "aws-signature-v4"
+  ],
   "author": "RBrNx",
   "license": "ISC",
   "dependencies": {
