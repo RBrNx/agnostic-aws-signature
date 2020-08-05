@@ -1,5 +1,5 @@
 <p align="center">
-  <img height="60" src="https://user-images.githubusercontent.com/7189823/69501658-06047600-0ed5-11ea-8f54-952bf1afd68c.png" alt="Library's logo">
+  <img height="90" src="https://user-images.githubusercontent.com/1332314/89441622-57902080-d745-11ea-9dee-e030a435eefd.png" alt="Library's logo">
 </p>
 
 <h3 align="center">
@@ -396,6 +396,8 @@ It's easy to get up and running locally! Just clone the repo, install the node m
 
 > yarn install # Alternatively use `npm install`
 ```
+
+<br/>
 
 #### Code Quality
 
