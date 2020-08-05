@@ -13,7 +13,7 @@ import {
   getHeaderKeys,
 } from './helpers';
 
-export const createAwsClient = (accessKey, secretKey, sessionToken, config) => {
+const createAwsClient = (accessKey, secretKey, sessionToken, config) => {
   const awsSigV4Client = {};
   const { serviceName, region, defaultAcceptType, defaultContentType, endpoint, debug = false } = config;
   const { origin, pathname } = new URL(endpoint);
@@ -106,3 +106,6 @@ export const createAwsClient = (accessKey, secretKey, sessionToken, config) => {
 
   return awsSigV4Client;
 };
+
+export { createAwsClient };
+export default createAwsClient;
