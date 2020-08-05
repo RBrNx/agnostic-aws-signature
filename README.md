@@ -7,16 +7,21 @@ Environment Agnostic implementation of the AWS Signature v4 Signing Process. Eve
 ![license](https://img.shields.io/npm/l/agnostic-aws-signature?style=flat-square)
 ![jest coverage](https://raw.githubusercontent.com/RBrNx/agnostic-aws-signature/master/shields/coverage.svg)
 
+<br />
+
 ## Contents
 
 - [Installation](#installation)
 - [Usage Guide](#usage-guide)
   - [Signing A Request](#signing-a-request)
   - [Rolling your own implementation](#rolling-your-own-implementation)
+  - [Usage with React Native](#usage-with-react-native)
 - [API Reference](#api-reference)
 - [Contributing](#contributing)
   - [Local Development](#local-development)
   - [Code Styling](#code-styling)
+
+<br />
 
 ## Installation
 
@@ -30,6 +35,8 @@ yarn add agnostic-aws-signature
 npm install agnostic-aws-signature
 ```
 
+<br />
+
 ## Usage Guide
 
 Just need to import it, easy peasy!
@@ -40,7 +47,9 @@ import createAwsClient from 'agnostic-aws-signature'; // Either import the defau
 import { createAwsClient } from 'agnostic-aws-signature'; // Or import the named export
 ```
 
-### Signing a Request
+<br />
+
+#### Signing a Request
 
 The key to communicating with an AWS Resource that requires use of the AWS Signature v4 process,
 is to send a set of Signed Headers along with our request.
@@ -78,7 +87,9 @@ const signedRequest = awsClient.signRequest({
 const response = await fetch(signedRequest.url, { headers: signedRequest.headers, body });
 ```
 
-### Rolling your own implementation
+<br />
+
+#### Rolling your own implementation
 
 `agnostic-aws-sgignature` exposes all of the helper functions it uses to produce the signed headers,
 so if you are following along with the [AWS Docs](https://docs.aws.amazon.com/general/latest/gr/sigv4_signing.html) or simply want to make some modifications to the process
@@ -91,6 +102,23 @@ import { buildCanonicalRequest, calculateSigningKey, ... } from 'agnostic-aws-si
 // Use any of the helper functions as you see fit
 const canonicalRequest = buildCanonicalRequest(requestMethod, requestPath, queryParams, headers, body);
 ```
+
+<br />
+
+#### Usage with React Native
+
+Since this library opts to use CryptoJS instead of relying on the Crypto module exposed by Node.js, it should work out of the box with React Native.
+Unfortunately the React Native team opted to roll their own `URL` [implementation](https://github.com/facebook/react-native/issues/16434)
+which does not support things like `new URL('https://www.google.com')`.
+
+To get around this (and to therefore use `agnostic-aws-signature` with RN) I would recommend you install [react-native-url-polyfill](https://github.com/charpeni/react-native-url-polyfill) and use
+either Option 1 or Option 2.
+
+```javascript
+import 'react-native-url-polyfill/auto';
+```
+
+<br/>
 
 ## API Reference
 
@@ -106,6 +134,8 @@ Returns the SHA256 Hash of the `value`.
 const hashedString = hash('test'); // Returns '9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08'
 ```
 
+<br />
+
 #### hmac(_secret, value_) => CryptoJS Binary
 
 - `secret {String}` Secret Key used in the HMAC-SHA256 Algorithm
@@ -119,6 +149,8 @@ const hmacBinary = hmac('secretkey', 'test'); // Returns '{ sigBytes: 32, words:
 const hmacString = hmacBinary.toString(); // Returns '9bbe228b3276b636ebc7b0a9f665fae1fe87acaaa6657e1decc21537e386bb16'
 ```
 
+<br />
+
 #### buildCanonicalUri(_uri_) => String
 
 - `uri {String}` URI to be encoded
@@ -129,9 +161,11 @@ Returns the encoded URI as outlined in Step 2 of the AWS Docs - [Create a Canoni
 const canonicalUri = buildCanonicalUri('/documents and settings/'); // Returns '/documents%20and%20settings/'
 ```
 
+<br />
+
 #### buildCanonicalQueryString(_queryParams_) => String
 
-- `_queryParams_ {Object}` An Object containing any number of query parameters that will be converted to a query string
+- `queryParams {Object}` An Object containing any number of query parameters that will be converted to a query string
 
 Returns the Query String as outlined in Step 3 of the AWS Docs - [Create a Canonical Request](https://docs.aws.amazon.com/general/latest/gr/sigv4-create-canonical-request.html)
 
@@ -139,9 +173,11 @@ Returns the Query String as outlined in Step 3 of the AWS Docs - [Create a Canon
 const queryString = buildCanonicalQueryString({ Action: 'ListUsers', Version: '2010-05-08' }); // Returns 'Action=ListUsers&Version=2010-05-08'
 ```
 
+<br />
+
 #### buildCanonicalHeaders(_headers_) => String
 
-- `_headers_ {Object}` An Object containing any number of headers that will be sent in the final request
+- `headers {Object}` An Object containing any number of headers that will be sent in the final request
 
 Returns a string of Header Keys and Values as outlined in Step 4 of the AWS Docs - [Create a Canonical Request](https://docs.aws.amazon.com/general/latest/gr/sigv4-create-canonical-request.html)
 
@@ -153,9 +189,11 @@ const headers = buildCanonicalHeaders({
 });
 ```
 
+<br />
+
 #### buildCanonicalSignedHeaders(_headers_) => String
 
-- `_headers_ {Object}` An Object containing any number of headers that will be sent in the final request
+- `headers {Object}` An Object containing any number of headers that will be sent in the final request
 
 Returns a string of semi-colon delimited Header Keys as outlined in Step 5 of the AWS Docs - [Create a Canonical Request](https://docs.aws.amazon.com/general/latest/gr/sigv4-create-canonical-request.html)
 
@@ -167,13 +205,15 @@ const signedHeaders = buildCanonicalSignedHeaders({
 });
 ```
 
+<br />
+
 #### buildCanonicalRequest(_method, path, queryParams, headers, payload_) => String
 
-- `_method_ {String}` The request method (GET, POST, etc)
-- `_path_ {String}` The request path (everything after the endpoint i.e '/api/route')
-- `_queryParams_ {Object}` An Object containing any number of query parameters that belong in the final request
-- `_headers_ {Object}` An Object containing any number of headers that belong in the final request
-- `_payload_ {Object|String}` The body of the request
+- `method {String}` The request method (GET, POST, etc)
+- `path {String}` The request path (everything after the endpoint i.e '/api/route')
+- `queryParams {Object}` An Object containing any number of query parameters that belong in the final request
+- `headers {Object}` An Object containing any number of headers that belong in the final request
+- `payload {Object|String}` The body of the request
 
 Returns a string of the final canonical request that is pieced together from all of the parameters.
 Outlined in Step 7 of the AWS Docs - [Create a Canonical Request](https://docs.aws.amazon.com/general/latest/gr/sigv4-create-canonical-request.html)
@@ -199,11 +239,13 @@ const canonicalRequest = buildCanonicalRequest('GET', '/api/users', queryParams,
 // e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
 ```
 
+<br />
+
 #### buildCredentialScope(_datetime, region, service_) => String
-_
-- `_datetime_ {String}` The current datetime in an ISO8601 format.
-- `_region_ {String}` The region where the AWS Service you want to request exists
-- `_service_ {String}` An Object containing any number of query parameters that belong in the final request
+
+- `datetime {String}` The current datetime in an ISO8601 format.
+- `region {String}` The region where the AWS Service you want to request exists
+- `service {String}` An Object containing any number of query parameters that belong in the final request
 
 Returns the credential scope for a request as outlined in Step 3 of the AWS Docs - [Create a String to Sign](https://docs.aws.amazon.com/general/latest/gr/sigv4-create-string-to-sign.html)
 
@@ -211,11 +253,13 @@ Returns the credential scope for a request as outlined in Step 3 of the AWS Docs
 const credentialScope = buildCredentialScope('20200830T123600Z', 'eu-west-2', 'execute-api'); // Returns '20200830/eu-west-2/execute-api/aws4_request\n'
 ```
 
+<br />
+
 #### buildStringToSign(_datetime, credentialScope, hashedCanonicalRequest_) => String
 
-- `_datetime_ {String}` The current datetime in an ISO8601 format.
-- `_credentialScope_ {String}` The credential scope built previously
-- `_hashedCanonicalRequest_ {String}` A SHA256 hash of the canonicalRequest built previously
+- `datetime {String}` The current datetime in an ISO8601 format.
+- `credentialScope {String}` The credential scope built previously
+- `hashedCanonicalRequest {String}` A SHA256 hash of the canonicalRequest built previously
 
 Returns the 'string to sign' for a request as outlined in the AWS Docs - [Create a String to Sign](https://docs.aws.amazon.com/general/latest/gr/sigv4-create-string-to-sign.html)
 
@@ -239,12 +283,14 @@ const stringToSign = buildStringToSign('20200830T123600Z', credentialScope, hash
 // f122ea64ffc8fda0b9ffcbc71f07f7d2c23e19f2ad2db26fec414ff0a0a595b7'
 ```
 
+<br />
+
 #### calculateSigningKey(_secretKey, datetime, region, service_) => String
 
-- `_secretKey_ {String}` A valid AWS Secret Key
-- `_datetime_ {String}` The current datetime in an ISO8601 format.
-- `_region_ {String}` The region where the AWS Service you want to request exists
-- `_service_ {String}` An Object containing any number of query parameters that belong in the final request
+- `secretKey {String}` A valid AWS Secret Key
+- `datetime {String}` The current datetime in an ISO8601 format.
+- `region {String}` The region where the AWS Service you want to request exists
+- `service {String}` An Object containing any number of query parameters that belong in the final request
 
 Returns the signing key for a request as outlined in Step 1 of the AWS Docs - [Calculate the Signature](https://docs.aws.amazon.com/general/latest/gr/sigv4-calculate-signature.html)
 
@@ -257,12 +303,14 @@ const signingKey = calculateSigningKey(mySecretKey, '20200830T123600Z', 'eu-west
 // f122ea64ffc8fda0b9ffcbc71f07f7d2c23e19f2ad2db26fec414ff0a0a595b7'
 ```
 
+<br />
+
 #### buildAuthorizationHeader(_accessKey, credentialScope, headers, signature_) => String
 
-- `_accessKey_ {String}` A valid AWS Access Key
-- `_credentialScope_ {String}` The credential scope built previously
-- `_headers_ {Object}` An Object containing any number of headers that belong in the final request
-- `_signature_ {String}` The hex representation of a HMAC-SHA256 hash with `signingKey` and `stringToSign` as parameters (See Step 2 of [Calculate the Signature](https://docs.aws.amazon.com/general/latest/gr/sigv4-calculate-signature.html))
+- `accessKey {String}` A valid AWS Access Key
+- `credentialScope {String}` The credential scope built previously
+- `headers {Object}` An Object containing any number of headers that belong in the final request
+- `signature {String}` The hex representation of a HMAC-SHA256 hash with `signingKey` and `stringToSign` as parameters (See Step 2 of [Calculate the Signature](https://docs.aws.amazon.com/general/latest/gr/sigv4-calculate-signature.html))
 
 Returns the Authorization header for a request as outlined in Step 1 of the AWS Docs - [Add Signature to the Request](https://docs.aws.amazon.com/general/latest/gr/sigv4-add-signature-to-request.html)
 
@@ -281,6 +329,8 @@ const authorizationHeader = buildAuthorizationHeader(myAccessKey, credentialScop
 // Returns 'AWS4-HMAC-SHA256 Credential=AKIDEXAMPLE/20200830/eu-west-2/execute-api/aws4_request, SignedHeaders=content-type;host;x-amz-date, Signature=5d672d79c15b13162d9279b0855cfba6789a8edb4c82c400e06b5924a6f2b5d7'
 ```
 
+<br />
+
 #### extractHostname(_url_) => String
 
 - `url {String}` The URL we want to extract the hostname from
@@ -291,9 +341,11 @@ Returns the hostname of the provided URL.
 const hostname = extractHostname('https://docs.aws.amazon.com/general/latest/gr/sigv4-add-signature-to-request.html'); // Returns 'docs.aws.amazon.com'
 ```
 
+<br />
+
 #### getHeaderKeys(_headers_) => [String]
 
-- `_headers_ {Object}` An Object containing any number of headers that will be sent in the final request
+- `headers {Object}` An Object containing any number of headers that will be sent in the final request
 
 Returns an array containing each header key lowercased
 
