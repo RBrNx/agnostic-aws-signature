@@ -1,11 +1,31 @@
-# agnostic-aws-signature
+<p align="center">
+  <img height="60" src="https://user-images.githubusercontent.com/7189823/69501658-06047600-0ed5-11ea-8f54-952bf1afd68c.png" alt="Library's logo">
+</p>
 
-Environment Agnostic implementation of the AWS Signature v4 Signing Process. Even works with React Native!
+<h3 align="center">
+  Agnostic AWS Signature
+</h3>
 
-![npm version](https://img.shields.io/npm/v/agnostic-aws-signature?style=flat-square)
-![npm bundle size](https://img.shields.io/bundlephobia/min/agnostic-aws-signature?style=flat-square)
-![license](https://img.shields.io/npm/l/agnostic-aws-signature?style=flat-square)
-![jest coverage](https://raw.githubusercontent.com/RBrNx/agnostic-aws-signature/master/shields/coverage.svg)
+<p align="center">
+  A lightweight, environment-agnostic implementation of the AWS Signature v4 Signing Process. Even works with React Native!
+</p>
+
+<p align="center">
+  <a href="https://www.npmjs.com/package/agnostic-aws-signature">
+    <img src="https://img.shields.io/npm/v/agnostic-aws-signature?style=flat-square" alt="Current npm package version." />
+  </a>
+  <a href="https://www.npmjs.com/package/agnostic-aws-signature">
+    <img src="https://img.shields.io/bundlephobia/min/agnostic-aws-signature?style=flat-square" alt="Bundle size" />
+  </a>
+  <a href="https://github.com/RBrNx/agnostic-aws-signature/blob/master/LICENSE">
+    <img src="https://raw.githubusercontent.com/RBrNx/agnostic-aws-signature/master/shields/coverage.svg" alt="Test coverage" />
+  </a>
+  <a href="https://github.com/charpeni/react-native-url-polyfill/blob/master/LICENSE">
+    <img src="https://img.shields.io/npm/l/agnostic-aws-signature?style=flat-square" alt="Agnostic AWS Signature is released under the ISC license." />
+  </a>
+</p>
+
+<hr />
 
 <br />
 
