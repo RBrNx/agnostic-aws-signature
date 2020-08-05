@@ -39,7 +39,7 @@
 - [API Reference](#api-reference)
 - [Contributing](#contributing)
   - [Local Development](#local-development)
-  - [Code Styling](#code-styling)
+  - [Code Quality](#code-quality)
 
 <br />
 
@@ -378,3 +378,29 @@ const headers = {
 
 const headerKeys = getHeaderKeys(headers); // Returns [ 'content-type', 'host', 'x-amz-date' ]
 ```
+
+<br/>
+
+## Contributing
+
+I am more than happy to accept any contributions anyone would like to make, whether that's raising an issue, suggesting an improvement or developing a new feature.
+
+#### Local Development
+
+It's easy to get up and running locally! Just clone the repo, install the node modules and away you go! 🚀
+
+```bash
+> git clone git@github.com:RBrNx/agnostic-aws-signature.git
+
+> cd agnostic-aws-signature
+
+> yarn install # Alternatively use `npm install`
+```
+
+<br/>
+
+#### Code Quality
+
+To help keep the code styling consistent across the repo, I am using ESLint and Prettier, along with Git Hooks to ensure that any pull requests will meet the code quality standards.
+
+While some of the hooks are specifically for code styling, there is a `pre-push` hook implemented that will run all of the Unit Tests before any commits are pushed. If any of the Unit Tests fail, or the overall Test Coverage drops below 95%, the push will fail
