@@ -14,6 +14,7 @@ coverage
 # build
 build
 index.min.js
+dist
 
 # eslint
 .eslintcache
