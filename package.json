@@ -2,10 +2,10 @@
   "name": "agnostic-aws-signature",
   "version": "1.0.3",
   "description": "Environment Agnostic implementation of the AWS Signature v4 Signing Process. Even works with React Native!",
-  "main": "src/index.js",
-  "type": "module",
+  "main": "dist/index.js",
   "scripts": {
-    "test": "jest && coverage-shield"
+    "test": "jest && coverage-shield",
+    "build": "webpack --mode production"
   },
   "keywords": [
     "agnostic-aws-signature",
@@ -24,8 +24,10 @@
   "devDependencies": {
     "@babel/core": "^7.10.5",
     "@babel/preset-env": "^7.10.4",
+    "@size-limit/preset-small-lib": "^4.5.5",
     "babel-eslint": "^10.1.0",
     "babel-jest": "^26.1.0",
+    "babel-loader": "^8.1.0",
     "eslint": "^7.5.0",
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-import": "^2.22.0",
@@ -36,8 +38,13 @@
     "jest-coverage-shield": "^1.1.2",
     "lint-staged": ">=10",
     "mockdate": "^3.0.2",
-    "prettier": "^2.0.5"
+    "prettier": "^2.0.5",
+    "webpack": "^4.44.1",
+    "webpack-cli": "^3.3.12"
   },
+  "files": [
+    "dist"
+  ],
   "husky": {
     "hooks": {
       "pre-commit": "lint-staged",
@@ -46,5 +53,11 @@
   },
   "lint-staged": {
     "*.js": "eslint --cache --fix"
-  }
+  },
+  "size-limit": [
+    {
+      "path": "src/index.js",
+      "limit": "10 KB"
+    }
+  ]
 }
