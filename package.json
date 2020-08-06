@@ -1,6 +1,6 @@
 {
   "name": "agnostic-aws-signature",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Environment Agnostic implementation of the AWS Signature v4 Signing Process. Even works with React Native!",
   "main": "dist/index.js",
   "scripts": {
