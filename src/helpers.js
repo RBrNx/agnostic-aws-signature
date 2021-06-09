@@ -72,10 +72,9 @@ const extractHostname = (url) => {
   return hostname;
 };
 
-const getHeaderKeys = (headers) => {
-  if (!headers) return [];
-
-  return Object.keys(headers).map((key) => key.toLowerCase());
+const getLowercaseHeaders = (headers) => {
+  const lowercaseHeaders = Object.entries(headers).map(([header, value]) => [header.toLowerCase(), value]);
+  return Object.fromEntries(lowercaseHeaders);
 };
 
 export {
@@ -91,5 +90,5 @@ export {
   calculateSigningKey,
   buildAuthorizationHeader,
   extractHostname,
-  getHeaderKeys,
+  getLowercaseHeaders,
 };

@@ -10,7 +10,7 @@ import {
   hmac,
   buildAuthorizationHeader,
   buildCanonicalQueryString,
-  getHeaderKeys,
+  getLowercaseHeaders,
 } from './helpers';
 
 const createAwsClient = (accessKey, secretKey, sessionToken, config) => {
@@ -32,25 +32,24 @@ const createAwsClient = (accessKey, secretKey, sessionToken, config) => {
   awsSigV4Client.debug = debug;
 
   awsSigV4Client.signRequest = (request) => {
-    const { method, queryParams, headers = {}, path = '' } = request;
-    const { body } = request;
+    const { method, queryParams, path = '', body } = request;
+    const headers = getLowercaseHeaders(request.headers || {});
 
     const requestMethod = method.toUpperCase();
     const requestPath = awsSigV4Client.pathComponent + path;
 
     // If the user has not specified an override for Content type the use default
-    if (!getHeaderKeys(headers).includes('content-type')) {
-      headers['Content-Type'] = awsSigV4Client.defaultContentType;
+    if (!headers['content-type']) {
+      headers['content-type'] = awsSigV4Client.defaultContentType;
     }
 
     // If the user has not specified an override for Accept type the use default
-    if (!getHeaderKeys(headers).includes('accept')) {
-      headers.Accept = awsSigV4Client.defaultAcceptType;
+    if (!headers['accept']) {
+      headers.accept = awsSigV4Client.defaultAcceptType;
     }
 
     // If there is no body remove the content-type header so it is not included in SigV4 calculation
     if (!body) {
-      delete headers['Content-Type'];
       delete headers['content-type'];
     }
 
@@ -80,8 +79,8 @@ const createAwsClient = (accessKey, secretKey, sessionToken, config) => {
     if (queryString) url += `?${queryString}`;
 
     // Need to re-attach Content-Type if it is not specified at this point
-    if (!getHeaderKeys(headers).includes('content-type')) {
-      headers['Content-Type'] = awsSigV4Client.defaultContentType;
+    if (!headers['content-type']) {
+      headers['content-type'] = awsSigV4Client.defaultContentType;
     }
 
     if (awsSigV4Client.debug) {
